@@ -1,0 +1,53 @@
+# build
+# buildah bud -t epic -f Containerfile-epic .
+
+# Run server
+# podman run --rm -v .:/epic -p 3413:3413 --name=epic-01 localhost/epic server run
+
+# Run erver on host network
+# podman run --network=host  -it --rm -v .:/epic --name=epic-02 localhost/epic client status
+
+# Run client
+# podman run --network=host  -it --rm -v .:/epic --name=epic-02 localhost/epic client status
+
+#FROM rust:1.60
+FROM docker.io/library/rust:1.67.0-slim-buster
+#FROM ubuntu:noble
+
+RUN apt-get update
+
+#RUN apt-get -y install libncurses6 libncursesw6 zlib1g openssl locales
+RUN apt-get -y install build-essential cmake git libgit2-dev clang libncurses5-dev libncursesw5-dev zlib1g-dev pkg-config llvm curl libssl-dev
+
+WORKDIR /usr/src/myapp
+COPY . .
+#RUN cargo install --path .
+#RUN git submodule update --init --recursive
+RUN cargo build --release 
+#--path .
+
+# RUN dpkg -r libssl1.1:amd64
+# RUN dpkg -r libssl-dev:amd64
+#RUN curl https://sh.rustup.rs -sSf | bash -s -- -y
+
+# COPY libssl1.1_1.1.1f-1ubuntu2.23_amd64.deb .
+# #RUN ls /libssl1.1_1.1.1f-1ubuntu2.23_amd64.deb
+# ENV DEBIAN_FRONTEND "noninteractive"
+# RUN dpkg -i libssl1.1_1.1.1f-1ubuntu2.23_amd64.deb
+
+# COPY epic_3.6.0_amd64.deb .
+# RUN dpkg -i epic_3.6.0_amd64.deb
+# RUN which epic
+
+# #ADD myecho /usr/local/bin
+# ADD demo_menus /usr/local/bin
+
+# #RUN locale-gen es_ES.UTF-8
+# RUN locale-gen en_US.UTF-8
+
+# WORKDIR "/epic"
+
+#ENTRYPOINT "/usr/local/bin/myecho"
+#ENTRYPOINT ["epic"]
+#CMD ["-h"]
+CMD ["bash"]
