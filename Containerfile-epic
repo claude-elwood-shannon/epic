@@ -10,17 +10,23 @@
 # Run client
 # podman run --network=host  -it --rm -v .:/epic --name=epic-02 localhost/epic client status
 
-#FROM rust:1.60
+#FROM rust:1. 60
 FROM docker.io/library/rust:1.67.0-slim-buster
 #FROM ubuntu:noble
 
-RUN apt-get update
-
-#RUN apt-get -y install libncurses6 libncursesw6 zlib1g openssl locales
-RUN apt-get -y install build-essential cmake git libgit2-dev clang libncurses5-dev libncursesw5-dev zlib1g-dev pkg-config llvm curl libssl-dev
-
 WORKDIR /usr/src/myapp
 COPY . .
+RUN ls -l src/
+
+
+RUN apt-get update
+RUN apt search librandomx
+
+#RUN apt-get -y install libncurses6 libncursesw6 zlib1g openssl locales
+RUN apt-get -y install build-essential cmake git libgit2-dev clang libncurses5-dev libncursesw5-dev zlib1g-dev pkg-config llvm curl libssl-dev librandomx0 librandomx-dev
+
+
+
 #RUN cargo install --path .
 #RUN git submodule update --init --recursive
 RUN cargo build --release 
